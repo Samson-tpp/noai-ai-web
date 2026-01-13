@@ -11,39 +11,35 @@ import { Post } from '../../core/models/post.model';
   standalone: true,
   imports: [CommonModule, FormsModule, RouterModule],
   template: `
-    <div class="grid grid-cols-1 xl:grid-cols-12 gap-6 items-start">
+    <div class="grid grid-cols-1 xl:grid-cols-12 gap-4 md:gap-6 items-start pb-20 md:pb-6">
       <!-- Main Feed -->
-      <section class="xl:col-span-8 flex flex-col gap-6">
+      <section class="xl:col-span-8 flex flex-col gap-4 md:gap-6">
         <!-- Post Composer -->
-        <div class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-5 shadow-sm">
-          <div class="flex gap-4">
+        <div class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-4 md:p-5 shadow-sm">
+          <div class="flex gap-3 md:gap-4">
             <div
-              class="h-11 w-11 rounded-xl bg-cover bg-center shrink-0 border border-slate-200 dark:border-slate-600"
+              class="h-10 w-10 md:h-11 md:w-11 rounded-xl bg-cover bg-center shrink-0 border border-slate-200 dark:border-slate-600"
               [style.background-image]="'url(' + (dataService.currentUser()?.avatar || '') + ')'"
             ></div>
-            <div class="flex-1">
+            <div class="flex-1 min-w-0">
               <textarea
                 [(ngModel)]="newPostContent"
-                class="w-full border-none focus:ring-0 p-0 text-slate-900 dark:text-white placeholder-slate-400 text-base resize-none h-20 bg-transparent"
+                class="w-full border-none focus:ring-0 p-0 text-slate-900 dark:text-white placeholder-slate-400 text-sm md:text-base resize-none h-20 bg-transparent"
                 placeholder="Share your verified insights..."
               ></textarea>
-              <div class="flex items-center justify-between pt-4 border-t border-slate-200 dark:border-slate-700 mt-3">
-                <div class="flex gap-2 text-slate-500">
-                  <button class="p-2.5 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-xl transition-colors">
-                    <span class="material-symbols-outlined text-xl">image</span>
+              <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-3 md:pt-4 border-t border-slate-200 dark:border-slate-700 mt-3">
+                <div class="flex gap-2 text-slate-500 overflow-x-auto">
+                  <button class="p-2 md:p-2.5 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-xl transition-colors flex-shrink-0">
+                    <span class="material-symbols-outlined text-lg md:text-xl">image</span>
                   </button>
-                  <button class="p-2.5 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-xl transition-colors">
-                    <span class="material-symbols-outlined text-xl">attach_file</span>
+                  <button class="p-2 md:p-2.5 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-xl transition-colors flex-shrink-0">
+                    <span class="material-symbols-outlined text-lg md:text-xl">attach_file</span>
                   </button>
-                  <div class="flex items-center gap-2 px-3 py-2 bg-emerald-50 dark:bg-emerald-900/30 border border-emerald-200 dark:border-emerald-700 rounded-xl text-xs font-medium text-emerald-700 dark:text-emerald-300">
-                    <span class="material-symbols-outlined text-sm">verified_user</span>
-                    Identity Verified
-                  </div>
                 </div>
                 <button
                   (click)="createPost()"
                   [disabled]="!newPostContent.trim()"
-                  class="bg-primary hover:bg-primary/90 dark:bg-white dark:text-primary dark:hover:bg-slate-100 text-white px-5 py-2.5 rounded-xl text-sm font-bold transition-all shadow-sm flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                  class="bg-primary hover:bg-primary/90 dark:bg-white dark:text-primary dark:hover:bg-slate-100 text-white px-5 py-2.5 rounded-xl text-sm font-bold transition-all shadow-sm flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed w-full sm:w-auto"
                 >
                   <span>Post</span>
                   <span class="material-symbols-outlined text-lg">send</span>
@@ -57,29 +53,29 @@ import { Post } from '../../core/models/post.model';
         @for (post of dataService.posts(); track post.id) {
           <article class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-sm overflow-hidden hover:shadow-md transition-shadow">
             <!-- Post Header -->
-            <div class="p-5 flex items-start justify-between border-b border-slate-100 dark:border-slate-700">
-              <div class="flex gap-3">
-                <a [routerLink]="['/user', post.author.id]">
+            <div class="p-4 md:p-5 flex items-start justify-between border-b border-slate-100 dark:border-slate-700">
+              <div class="flex gap-2 md:gap-3 min-w-0 flex-1">
+                <a [routerLink]="['/user', post.author.id]" class="flex-shrink-0">
                   <div
-                    class="h-11 w-11 rounded-xl bg-cover bg-center border border-slate-200 dark:border-slate-600"
+                    class="h-10 w-10 md:h-11 md:w-11 rounded-xl bg-cover bg-center border border-slate-200 dark:border-slate-600"
                     [style.background-image]="'url(' + post.author.avatar + ')'"
                   ></div>
                 </a>
-                <div>
-                  <div class="flex items-center gap-2">
-                    <a [routerLink]="['/user', post.author.id]" class="font-bold text-slate-900 dark:text-white text-sm hover:underline">
+                <div class="min-w-0 flex-1">
+                  <div class="flex items-center gap-1.5 md:gap-2 flex-wrap">
+                    <a [routerLink]="['/user', post.author.id]" class="font-bold text-slate-900 dark:text-white text-sm hover:underline truncate">
                       {{ post.author.displayName }}
                     </a>
                     @if (post.author.isVerified) {
-                      <span class="material-symbols-outlined text-emerald-500 text-lg filled" title="Verified Human">verified</span>
+                      <span class="material-symbols-outlined text-emerald-500 text-base md:text-lg filled flex-shrink-0" title="Verified Human">verified</span>
                     }
-                    <span class="text-slate-400 text-xs">{{ '@' + post.author.username }}</span>
+                    <span class="text-slate-400 text-xs truncate">{{ '@' + post.author.username }}</span>
                   </div>
-                  <div class="flex items-center gap-2 mt-1">
-                    <span class="text-xs text-slate-400">{{ getTimeAgo(post.createdAt) }}</span>
+                  <div class="flex items-center gap-2 mt-1 flex-wrap">
+                    <span class="text-xs text-slate-400 flex-shrink-0">{{ getTimeAgo(post.createdAt) }}</span>
                     @if (post.sessionId) {
-                      <span class="text-slate-300">•</span>
-                      <div class="flex items-center gap-1 px-2 py-0.5 bg-slate-100 dark:bg-slate-700 rounded border border-slate-200 dark:border-slate-600">
+                      <span class="text-slate-300 hidden sm:inline">•</span>
+                      <div class="flex items-center gap-1 px-2 py-0.5 bg-slate-100 dark:bg-slate-700 rounded border border-slate-200 dark:border-slate-600 hidden sm:flex">
                         <span class="material-symbols-outlined text-slate-500 text-xs">fingerprint</span>
                         <span class="text-[10px] font-mono font-medium text-slate-600 dark:text-slate-400">ID: {{ post.sessionId }}</span>
                       </div>
@@ -93,11 +89,11 @@ import { Post } from '../../core/models/post.model';
             </div>
 
             <!-- Post Content -->
-            <div class="p-5">
+            <div class="p-4 md:p-5">
               <!-- AI Score Badge -->
-              <div class="flex items-center gap-3 mb-4">
+              <div class="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3 mb-4">
                 <div
-                  class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-mono font-bold border"
+                  class="inline-flex items-center gap-2 px-2.5 md:px-3 py-1.5 rounded-lg text-[10px] md:text-xs font-mono font-bold border"
                   [class]="getAIScoreClass(post.aiScoreStatus)"
                 >
                   @if (post.aiScoreStatus === 'pass') {
@@ -119,7 +115,7 @@ import { Post } from '../../core/models/post.model';
               }
 
               <!-- Content -->
-              <p class="text-slate-700 dark:text-slate-300 text-[15px] leading-relaxed whitespace-pre-line">{{ post.content }}</p>
+              <p class="text-slate-700 dark:text-slate-300 text-sm md:text-[15px] leading-relaxed whitespace-pre-line">{{ post.content }}</p>
 
               <!-- Media -->
               @if (post.media && post.media.length > 0) {
@@ -161,31 +157,31 @@ import { Post } from '../../core/models/post.model';
             </div>
 
             <!-- Post Actions -->
-            <div class="px-5 py-4 bg-slate-50 dark:bg-slate-800/50 border-t border-slate-200 dark:border-slate-700 flex items-center justify-between">
-              <div class="flex items-center gap-4 md:gap-6">
+            <div class="px-4 md:px-5 py-3 md:py-4 bg-slate-50 dark:bg-slate-800/50 border-t border-slate-200 dark:border-slate-700 flex items-center justify-between">
+              <div class="flex items-center gap-3 md:gap-6">
                 <button
                   (click)="endorsePost(post)"
-                  class="flex items-center gap-2 text-slate-500 hover:text-emerald-500 transition-colors group"
+                  class="flex items-center gap-1.5 md:gap-2 text-slate-500 hover:text-emerald-500 transition-colors group"
                   [class.text-emerald-500]="post.isEndorsed"
                 >
-                  <span class="material-symbols-outlined" [class.filled]="post.isEndorsed">verified</span>
+                  <span class="material-symbols-outlined text-lg md:text-xl" [class.filled]="post.isEndorsed">verified</span>
                   <span class="text-xs font-bold">{{ post.endorsements }}</span>
                 </button>
-                <button class="flex items-center gap-2 text-slate-500 hover:text-primary dark:hover:text-white transition-colors">
-                  <span class="material-symbols-outlined">chat_bubble</span>
+                <button class="flex items-center gap-1.5 md:gap-2 text-slate-500 hover:text-primary dark:hover:text-white transition-colors">
+                  <span class="material-symbols-outlined text-lg md:text-xl">chat_bubble</span>
                   <span class="text-xs font-bold">{{ post.comments }}</span>
                 </button>
-                <button class="flex items-center gap-2 text-slate-500 hover:text-primary dark:hover:text-white transition-colors">
-                  <span class="material-symbols-outlined">cached</span>
+                <button class="flex items-center gap-1.5 md:gap-2 text-slate-500 hover:text-primary dark:hover:text-white transition-colors">
+                  <span class="material-symbols-outlined text-lg md:text-xl">cached</span>
                   <span class="text-xs font-bold hidden sm:inline">{{ post.reposts }}</span>
                 </button>
-                <button class="flex items-center gap-2 text-slate-500 hover:text-primary dark:hover:text-white transition-colors">
-                  <span class="material-symbols-outlined">bookmark</span>
+                <button class="flex items-center gap-1.5 md:gap-2 text-slate-500 hover:text-primary dark:hover:text-white transition-colors">
+                  <span class="material-symbols-outlined text-lg md:text-xl">bookmark</span>
                 </button>
               </div>
-              <button class="flex items-center gap-1 text-slate-400 hover:text-red-500 transition-colors text-xs font-medium">
-                <span class="material-symbols-outlined text-base">flag</span>
-                <span class="hidden sm:inline">Report AI</span>
+              <button class="flex items-center gap-1 text-slate-400 hover:text-red-500 transition-colors text-xs font-medium flex-shrink-0">
+                <span class="material-symbols-outlined text-base md:text-lg">flag</span>
+                <span class="hidden md:inline">Report AI</span>
               </button>
             </div>
           </article>

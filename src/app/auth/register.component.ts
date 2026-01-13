@@ -7,7 +7,7 @@ import { ThemeService } from '../core/services/theme.service';
 import { ToastService } from '../core/services/toast.service';
 
 @Component({
-  selector: 'app-auth',
+  selector: 'app-register',
   standalone: true,
   imports: [CommonModule, FormsModule, RouterModule],
   template: `
@@ -43,121 +43,145 @@ import { ToastService } from '../core/services/toast.service';
       <main class="flex-grow flex items-center justify-center py-8 px-4 sm:px-6 lg:px-8">
         <div class="max-w-md w-full bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
 
-          <!-- Login Form -->
+          <!-- Registration Form -->
           <div class="p-6 md:p-8 lg:p-12">
             <div class="mx-auto flex flex-col justify-center">
               <div class="mb-8">
-                <h2 class="text-2xl font-bold text-primary dark:text-white mb-2">Welcome Back</h2>
-                <p class="text-slate-500 dark:text-slate-400 text-sm">Securely access your RooCoin wallet and feed.</p>
+                <h2 class="text-2xl font-bold text-primary dark:text-white mb-2">Join NOAI</h2>
+                <p class="text-slate-500 dark:text-slate-400 text-sm">Verify your humanity. Start earning RooCoin.</p>
               </div>
 
-              <form (ngSubmit)="onLogin()" class="space-y-6">
-                <div class="space-y-1">
-                  <label for="login-email" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Email Address</label>
-                  <div class="relative rounded-lg shadow-sm">
-                    <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                      <span class="material-symbols-outlined text-slate-400 text-xl">person</span>
-                    </div>
+              <form (ngSubmit)="onRegister()" class="space-y-5">
+                <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
+                  <div class="space-y-1">
+                    <label for="first-name" class="block text-sm font-medium text-slate-700 dark:text-slate-300">First Name</label>
                     <input
-                      type="email"
-                      id="login-email"
-                      [(ngModel)]="loginEmail"
-                      name="loginEmail"
-                      class="block w-full rounded-lg border border-slate-300 dark:border-slate-600 pl-10 py-3 text-sm focus:border-primary focus:ring-2 focus:ring-primary/20 dark:bg-slate-700 dark:text-white"
-                      placeholder="user@noai.io"
+                      type="text"
+                      id="first-name"
+                      [(ngModel)]="registerFirstName"
+                      name="firstName"
+                      class="block w-full rounded-lg border border-slate-300 dark:border-slate-600 px-4 py-3 text-sm focus:border-primary focus:ring-2 focus:ring-primary/20 dark:bg-slate-700 dark:text-white"
+                      placeholder="Jane"
+                    >
+                  </div>
+                  <div class="space-y-1">
+                    <label for="last-name" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Last Name</label>
+                    <input
+                      type="text"
+                      id="last-name"
+                      [(ngModel)]="registerLastName"
+                      name="lastName"
+                      class="block w-full rounded-lg border border-slate-300 dark:border-slate-600 px-4 py-3 text-sm focus:border-primary focus:ring-2 focus:ring-primary/20 dark:bg-slate-700 dark:text-white"
+                      placeholder="Doe"
                     >
                   </div>
                 </div>
 
                 <div class="space-y-1">
-                  <label for="login-password" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Password</label>
-                  <div class="relative rounded-lg shadow-sm">
-                    <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                      <span class="material-symbols-outlined text-slate-400 text-xl">key</span>
-                    </div>
+                  <label for="reg-email" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Email Address</label>
+                  <input
+                    type="email"
+                    id="reg-email"
+                    [(ngModel)]="registerEmail"
+                    name="regEmail"
+                    class="block w-full rounded-lg border border-slate-300 dark:border-slate-600 px-4 py-3 text-sm focus:border-primary focus:ring-2 focus:ring-primary/20 dark:bg-slate-700 dark:text-white"
+                    placeholder="jane.doe@example.com"
+                  >
+                </div>
+
+                <div class="space-y-1">
+                  <label for="reg-password" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Create Password</label>
+                  <div class="relative">
                     <input
-                      [type]="showLoginPassword() ? 'text' : 'password'"
-                      id="login-password"
-                      [(ngModel)]="loginPassword"
-                      name="loginPassword"
-                      class="block w-full rounded-lg border border-slate-300 dark:border-slate-600 pl-10 pr-10 py-3 text-sm focus:border-primary focus:ring-2 focus:ring-primary/20 dark:bg-slate-700 dark:text-white"
-                      placeholder="Enter your password"
+                      [type]="showRegPassword() ? 'text' : 'password'"
+                      id="reg-password"
+                      [(ngModel)]="registerPassword"
+                      name="regPassword"
+                      class="block w-full rounded-lg border border-slate-300 dark:border-slate-600 px-4 pr-10 py-3 text-sm focus:border-primary focus:ring-2 focus:ring-primary/20 dark:bg-slate-700 dark:text-white"
+                      placeholder="Minimum 8 characters"
                     >
                     <button
                       type="button"
-                      (click)="showLoginPassword.set(!showLoginPassword())"
+                      (click)="showRegPassword.set(!showRegPassword())"
                       class="absolute inset-y-0 right-0 flex items-center pr-3 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
                     >
                       <span class="material-symbols-outlined text-xl">
-                        {{ showLoginPassword() ? 'visibility_off' : 'visibility' }}
+                        {{ showRegPassword() ? 'visibility_off' : 'visibility' }}
                       </span>
                     </button>
                   </div>
+                  <!-- Password Strength Indicator -->
+                  <div class="flex gap-1 mt-2 h-1">
+                    @for (i of [1,2,3,4]; track i) {
+                      <div class="flex-1 rounded-full overflow-hidden"
+                        [class]="i <= passwordStrength() ? getStrengthColor() : 'bg-slate-200 dark:bg-slate-700'">
+                      </div>
+                    }
+                  </div>
+                  <p class="text-xs text-slate-500 mt-1">Strength: {{ getStrengthText() }}</p>
                 </div>
 
-                <div class="flex items-center justify-between">
-                  <div class="flex items-center">
+                <div class="space-y-1">
+                  <label for="confirm-password" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Confirm Password</label>
+                  <input
+                    type="password"
+                    id="confirm-password"
+                    [(ngModel)]="registerConfirmPassword"
+                    name="confirmPassword"
+                    class="block w-full rounded-lg border border-slate-300 dark:border-slate-600 px-4 py-3 text-sm focus:border-primary focus:ring-2 focus:ring-primary/20 dark:bg-slate-700 dark:text-white"
+                    placeholder="Re-enter password"
+                  >
+                </div>
+
+                <div class="flex items-start">
+                  <div class="flex h-5 items-center">
                     <input
-                      id="remember-me"
-                      name="remember-me"
+                      id="terms"
+                      name="terms"
                       type="checkbox"
-                      [(ngModel)]="rememberMe"
+                      [(ngModel)]="agreeToTerms"
                       class="h-4 w-4 rounded border-slate-300 text-primary focus:ring-primary bg-white dark:bg-slate-700 dark:border-slate-600"
                     >
-                    <label for="remember-me" class="ml-2 block text-sm text-slate-500 dark:text-slate-400">Trust this device</label>
                   </div>
-                  <div class="text-sm">
-                    <a href="#" class="font-medium text-primary hover:text-primary/80 dark:text-blue-400 dark:hover:text-blue-300">Forgot password?</a>
+                  <div class="ml-3 text-sm">
+                    <label for="terms" class="text-slate-500 dark:text-slate-400">
+                      I agree to the <a href="#" class="text-primary hover:underline dark:text-white font-medium">Terms of Service</a> and strict <a href="#" class="text-primary hover:underline dark:text-white font-medium">No-AI Policy</a>.
+                    </label>
                   </div>
                 </div>
 
-                @if (authService.error()) {
-                  <div class="p-3 rounded-lg bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 text-sm flex items-center gap-2">
-                    <span class="material-symbols-outlined text-lg">error</span>
-                    {{ authService.error() }}
-                  </div>
-                }
-
-                <div>
-                  <button
-                    type="submit"
-                    [disabled]="authService.isLoading()"
-                    class="flex w-full justify-center rounded-lg bg-primary py-3 px-4 text-sm font-bold text-white shadow-sm hover:bg-primary/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    @if (authService.isLoading()) {
-                      <span class="flex items-center gap-2">
-                        <svg class="animate-spin h-5 w-5" viewBox="0 0 24 24">
-                          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle>
-                          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                        </svg>
-                        Authenticating...
-                      </span>
-                    } @else {
-                      <span class="flex items-center gap-2">
-                        <span class="material-symbols-outlined text-lg">lock_open</span>
-                        Access Account
-                      </span>
-                    }
-                  </button>
-                </div>
+                <button
+                  type="submit"
+                  [disabled]="authService.isLoading()"
+                  class="flex w-full justify-center rounded-lg bg-primary py-3 px-4 text-sm font-bold text-white shadow-sm hover:bg-primary/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  @if (authService.isLoading()) {
+                    <span class="flex items-center gap-2">
+                      <svg class="animate-spin h-5 w-5" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      Creating Account...
+                    </span>
+                  } @else {
+                    <span class="flex items-center gap-2">
+                      <span class="material-symbols-outlined text-lg">verified_user</span>
+                      Create Secure ID
+                    </span>
+                  }
+                </button>
               </form>
-
-              <div class="mt-6 text-center">
-                <p class="text-xs text-slate-400 dark:text-slate-500">
-                  Demo: Use any email/password to login
-                </p>
-              </div>
 
               <div class="mt-6 pt-6 border-t border-slate-200 dark:border-slate-700 text-center">
                 <p class="text-sm text-slate-600 dark:text-slate-400">
-                  Don't have an account?
-                  <a routerLink="/register" class="font-medium text-primary hover:text-primary/80 dark:text-white dark:hover:text-white/80 ml-1">Create an account</a>
+                  Already have an account?
+                  <a routerLink="/auth" class="font-medium text-primary hover:text-primary/80 dark:text-white dark:hover:text-white/80 ml-1">Sign in</a>
                 </p>
               </div>
 
               <div class="mt-6 text-center">
                 <p class="text-xs text-slate-400 dark:text-slate-500">
-                  Authorized personnel only. All access attempts are logged and monitored.
+                  Demo: Use any information to create an account
                 </p>
               </div>
             </div>
@@ -179,17 +203,11 @@ import { ToastService } from '../core/services/toast.service';
     </div>
   `
 })
-export class AuthComponent {
+export class RegisterComponent {
   authService = inject(AuthService);
   themeService = inject(ThemeService);
   toastService = inject(ToastService);
   router = inject(Router);
-
-  // Login form
-  loginEmail = '';
-  loginPassword = '';
-  rememberMe = false;
-  showLoginPassword = signal(false);
 
   // Register form
   registerFirstName = '';
@@ -201,10 +219,6 @@ export class AuthComponent {
   showRegPassword = signal(false);
 
   passwordStrength = signal(0);
-
-  constructor() {
-    // Watch password changes for strength indicator
-  }
 
   ngDoCheck() {
     this.calculatePasswordStrength();
@@ -237,23 +251,6 @@ export class AuthComponent {
     if (strength === 2) return 'Fair';
     if (strength === 3) return 'Good';
     return 'Strong';
-  }
-
-  async onLogin(): Promise<void> {
-    if (!this.loginEmail || !this.loginPassword) {
-      this.toastService.warning('Please fill in all fields');
-      return;
-    }
-
-    const success = await this.authService.login({
-      email: this.loginEmail,
-      password: this.loginPassword,
-      rememberMe: this.rememberMe
-    });
-
-    if (success) {
-      this.toastService.success('Welcome back!', 'You have successfully logged in.');
-    }
   }
 
   async onRegister(): Promise<void> {

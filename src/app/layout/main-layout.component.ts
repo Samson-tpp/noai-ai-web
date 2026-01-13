@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { AuthService } from '../core/services/auth.service';
@@ -76,9 +76,9 @@ import { ThemeService } from '../core/services/theme.service';
             </button>
 
             <!-- Profile Menu -->
-            <div class="relative">
+            <div class="relative" #profileMenuContainer>
               <button
-                (click)="showProfileMenu.set(!showProfileMenu())"
+                (click)="toggleProfileMenu($event)"
                 class="flex items-center gap-2 p-1 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
               >
                 <div
@@ -98,15 +98,15 @@ import { ThemeService } from '../core/services/theme.service';
                     </p>
                     <p class="text-xs text-slate-500">{{ '@' + dataService.currentUser()?.username }}</p>
                   </div>
-                  <a routerLink="/profile" class="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700">
+                  <a routerLink="/profile" (click)="closeProfileMenu()" class="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700">
                     <span class="material-symbols-outlined text-lg">person</span>
                     My Profile
                   </a>
-                  <a routerLink="/settings" class="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700">
+                  <a routerLink="/settings" (click)="closeProfileMenu()" class="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700">
                     <span class="material-symbols-outlined text-lg">settings</span>
                     Settings
                   </a>
-                  <a routerLink="/support" class="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700">
+                  <a routerLink="/support" (click)="closeProfileMenu()" class="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700">
                     <span class="material-symbols-outlined text-lg">help</span>
                     Help & Support
                   </a>
@@ -174,7 +174,7 @@ import { ThemeService } from '../core/services/theme.service';
         </aside>
 
         <!-- Main Content -->
-        <main class="flex-1 min-h-[calc(100vh-4rem)] p-4 lg:p-6">
+        <main class="flex-1 min-h-[calc(100vh-4rem)] p-4 lg:p-6 pb-24 lg:pb-6">
           <router-outlet></router-outlet>
         </main>
       </div>
@@ -245,6 +245,23 @@ export class MainLayoutComponent {
       return (volume / 1000).toFixed(1) + 'K';
     }
     return volume.toString();
+  }
+
+  toggleProfileMenu(event: Event): void {
+    event.stopPropagation();
+    this.showProfileMenu.set(!this.showProfileMenu());
+  }
+
+  closeProfileMenu(): void {
+    this.showProfileMenu.set(false);
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: Event): void {
+    // Close profile menu when clicking outside
+    if (this.showProfileMenu()) {
+      this.showProfileMenu.set(false);
+    }
   }
 
   logout(): void {

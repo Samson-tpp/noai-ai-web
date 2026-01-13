@@ -38,6 +38,11 @@ export const routes: Routes = [
     canActivate: [publicGuard]
   },
   {
+    path: 'register',
+    loadComponent: () => import('./auth/register.component').then(m => m.RegisterComponent),
+    canActivate: [publicGuard]
+  },
+  {
     path: 'email-verification',
     loadComponent: () => import('./auth/email-verification.component').then(m => m.EmailVerificationComponent)
   },

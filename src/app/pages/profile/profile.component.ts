@@ -65,10 +65,10 @@ import { DataService } from '../../core/services/data.service';
                 <div class="bg-primary dark:bg-white h-2 rounded-full" style="width: 75%"></div>
               </div>
 
-              <button class="w-full flex items-center justify-center gap-2 rounded-xl h-11 px-4 bg-primary/10 dark:bg-white/10 border border-primary/20 dark:border-white/20 text-primary dark:text-white text-sm font-bold transition-colors hover:bg-primary hover:text-white dark:hover:bg-white dark:hover:text-primary">
+              <a routerLink="/settings" class="w-full flex items-center justify-center gap-2 rounded-xl h-11 px-4 bg-primary/10 dark:bg-white/10 border border-primary/20 dark:border-white/20 text-primary dark:text-white text-sm font-bold transition-colors hover:bg-primary hover:text-white dark:hover:bg-white dark:hover:text-primary cursor-pointer">
                 <span class="material-symbols-outlined text-lg">edit</span>
                 Edit Profile
-              </button>
+              </a>
             </div>
           </div>
 
@@ -135,7 +135,7 @@ import { DataService } from '../../core/services/data.service';
 
           <!-- Activity Tab -->
           @if (activeTab() === 'activity') {
-            <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+            <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden pb-6">
               <!-- Header -->
               <div class="grid grid-cols-12 gap-4 p-4 border-b border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-700/50 text-xs font-bold text-slate-500 uppercase tracking-wider">
                 <div class="col-span-6 md:col-span-7 pl-2">Content / Activity</div>
@@ -176,6 +176,66 @@ import { DataService } from '../../core/services/data.service';
                     @if (post.sessionId) {
                       <span class="text-[10px] text-slate-400 mt-0.5">Session: {{ post.sessionId }}</span>
                     }
+                  </div>
+                </div>
+              }
+            </div>
+          }
+
+          <!-- Posts Tab -->
+          @if (activeTab() === 'posts') {
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pb-6">
+              @for (post of userPosts(); track post.id) {
+                <div class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden hover:shadow-md transition-shadow cursor-pointer group">
+                  <!-- Post Image/Preview -->
+                  <div class="aspect-square bg-gradient-to-br from-primary/10 to-accent/10 dark:from-primary/5 dark:to-accent/5 flex items-center justify-center relative overflow-hidden">
+                    @if (post.author.avatar) {
+                      <div class="absolute inset-0 bg-cover bg-center opacity-20 group-hover:opacity-30 transition-opacity"
+                        [style.background-image]="'url(' + post.author.avatar + ')'">
+                      </div>
+                    }
+                    <div class="relative z-10 p-6 text-center">
+                      <span class="material-symbols-outlined text-6xl text-primary/40 dark:text-white/40 mb-2">edit_square</span>
+                      <p class="text-sm font-medium text-slate-700 dark:text-slate-300 line-clamp-3">
+                        {{ post.content.substring(0, 120) }}{{ post.content.length > 120 ? '...' : '' }}
+                      </p>
+                    </div>
+                    <!-- AI Score Badge -->
+                    <div class="absolute top-3 right-3">
+                      <span
+                        class="inline-flex items-center px-2 py-1 rounded-full text-xs font-bold border backdrop-blur-sm"
+                        [class]="getScoreClass(post.aiScoreStatus)"
+                      >
+                        {{ post.aiScore.toFixed(0) }}% AI
+                      </span>
+                    </div>
+                  </div>
+                  <!-- Post Info -->
+                  <div class="p-4">
+                    <div class="flex items-center justify-between mb-2">
+                      <span class="text-xs text-slate-500">{{ getTimeAgo(post.createdAt) }}</span>
+                      @if (post.verificationMethod) {
+                        <div class="flex items-center gap-1 text-primary dark:text-white">
+                          <span class="material-symbols-outlined text-sm">verified</span>
+                          <span class="text-xs font-medium">Verified</span>
+                        </div>
+                      }
+                    </div>
+                    <!-- Engagement Stats -->
+                    <div class="flex items-center gap-4 text-xs text-slate-500">
+                      <div class="flex items-center gap-1">
+                        <span class="material-symbols-outlined text-sm">thumb_up</span>
+                        <span>{{ post.endorsements }}</span>
+                      </div>
+                      <div class="flex items-center gap-1">
+                        <span class="material-symbols-outlined text-sm">comment</span>
+                        <span>{{ post.comments || 0 }}</span>
+                      </div>
+                      <div class="flex items-center gap-1">
+                        <span class="material-symbols-outlined text-sm">visibility</span>
+                        <span>{{ (post.endorsements * 12) || 0 }}</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               }
@@ -230,6 +290,7 @@ export class ProfileComponent {
 
   tabs = [
     { id: 'activity', label: 'Activity Log', icon: 'history_edu' },
+    { id: 'posts', label: 'Posts', icon: 'grid_view' },
     { id: 'stats', label: 'Statistics', icon: 'bar_chart' },
   ];
 

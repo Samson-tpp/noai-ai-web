@@ -21,9 +21,9 @@ import { DataService } from '../../core/services/data.service';
         </div>
       </div>
 
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6 mb-6 md:mb-8">
         <!-- Balance Card -->
-        <div class="lg:col-span-2 bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 rounded-2xl p-6 md:p-8 border border-amber-200 dark:border-amber-700 shadow-sm relative overflow-hidden">
+        <div class="lg:col-span-2 bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 rounded-2xl p-5 md:p-6 lg:p-8 border border-amber-200 dark:border-amber-700 shadow-sm relative overflow-hidden">
           <div class="absolute top-0 right-0 p-4 opacity-10">
             <span class="material-symbols-outlined text-[120px]">account_balance_wallet</span>
           </div>
@@ -39,13 +39,13 @@ import { DataService } from '../../core/services/data.service';
               ≈ {{ formatUsd(wallet().usdValue) }} USD
             </p>
 
-            <div class="flex flex-wrap gap-3 mt-8">
-              <button class="flex items-center justify-center gap-2 h-12 px-6 bg-amber-600 hover:bg-amber-700 text-white text-sm font-bold rounded-xl transition-all shadow-md">
-                <span class="material-symbols-outlined text-xl">savings</span>
+            <div class="flex flex-col sm:flex-row gap-3 mt-6 md:mt-8">
+              <a routerLink="/staking" class="flex items-center justify-center gap-2 h-11 md:h-12 px-5 md:px-6 bg-amber-600 hover:bg-amber-700 text-white text-sm font-bold rounded-xl transition-all shadow-md">
+                <span class="material-symbols-outlined text-lg md:text-xl">savings</span>
                 Earn Yield
-              </button>
-              <button class="flex items-center justify-center gap-2 h-12 px-6 bg-white dark:bg-slate-800 border border-amber-300 dark:border-amber-600 text-amber-700 dark:text-amber-400 hover:bg-amber-50 dark:hover:bg-slate-700 text-sm font-bold rounded-xl transition-all">
-                <span class="material-symbols-outlined text-xl">payments</span>
+              </a>
+              <button class="flex items-center justify-center gap-2 h-11 md:h-12 px-5 md:px-6 bg-white dark:bg-slate-800 border border-amber-300 dark:border-amber-600 text-amber-700 dark:text-amber-400 hover:bg-amber-50 dark:hover:bg-slate-700 text-sm font-bold rounded-xl transition-all cursor-pointer">
+                <span class="material-symbols-outlined text-lg md:text-xl">payments</span>
                 Spend
               </button>
             </div>
@@ -79,22 +79,22 @@ import { DataService } from '../../core/services/data.service';
       </div>
 
       <!-- Balance Breakdown -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-        <div class="bg-white dark:bg-slate-800 rounded-2xl p-5 border border-slate-200 dark:border-slate-700 shadow-sm">
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4 mb-6 md:mb-8">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl p-4 md:p-5 border border-slate-200 dark:border-slate-700 shadow-sm">
           <p class="text-slate-500 text-xs font-semibold uppercase mb-2">Available</p>
-          <p class="text-2xl font-bold text-slate-900 dark:text-white font-mono">
+          <p class="text-xl md:text-2xl font-bold text-slate-900 dark:text-white font-mono">
             {{ wallet().availableBalance.toLocaleString() }} <span class="text-sm text-slate-400">ROO</span>
           </p>
         </div>
-        <div class="bg-white dark:bg-slate-800 rounded-2xl p-5 border border-slate-200 dark:border-slate-700 shadow-sm">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl p-4 md:p-5 border border-slate-200 dark:border-slate-700 shadow-sm">
           <p class="text-slate-500 text-xs font-semibold uppercase mb-2">Staked</p>
-          <p class="text-2xl font-bold text-slate-900 dark:text-white font-mono">
+          <p class="text-xl md:text-2xl font-bold text-slate-900 dark:text-white font-mono">
             {{ wallet().stakedBalance.toLocaleString() }} <span class="text-sm text-slate-400">ROO</span>
           </p>
         </div>
-        <div class="bg-white dark:bg-slate-800 rounded-2xl p-5 border border-slate-200 dark:border-slate-700 shadow-sm">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl p-4 md:p-5 border border-slate-200 dark:border-slate-700 shadow-sm">
           <p class="text-slate-500 text-xs font-semibold uppercase mb-2">Pending Rewards</p>
-          <p class="text-2xl font-bold text-emerald-600 dark:text-emerald-400 font-mono">
+          <p class="text-xl md:text-2xl font-bold text-emerald-600 dark:text-emerald-400 font-mono">
             +{{ wallet().pendingRewards.toLocaleString() }} <span class="text-sm text-slate-400">ROO</span>
           </p>
         </div>
